@@ -1,0 +1,136 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public/educational profile metadata for a student or teacher (PII isolated in private subcollection).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "fullName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["student", "teacher"] },
+        "teacherApproved": { "type": "boolean" },
+        "className": { "type": "string", "maxLength": 40 },
+        "homeroom": { "type": "string", "maxLength": 40 },
+        "subjectTeacher": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "fullName", "role", "teacherApproved", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Strictly owner/admin-only PII for an EDU SMART user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "birthDate": { "type": "string", "maxLength": 20 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "StudyTask": {
+      "title": "StudyTask",
+      "description": "A planned study task in 01. STUDY PLAN.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "subject": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "goal": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "dueDate": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "studySlot": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "done": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "subject", "goal", "dueDate", "studySlot", "done", "createdAt", "updatedAt"]
+    },
+    "ThinkEntry": {
+      "title": "ThinkEntry",
+      "description": "Initial student reasoning recorded in 02. THINK FIRST prior to AI Coach.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "subject": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "question": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "answer": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "confidence": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "subject", "question", "answer", "confidence", "createdAt"]
+    },
+    "FactCheckRecord": {
+      "title": "FactCheckRecord",
+      "description": "Verification record comparing AI responses against textbooks in 04. FACT CHECK.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "content": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "source": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "conclusion": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "content", "source", "conclusion", "createdAt"]
+    },
+    "SelfTestEntry": {
+      "title": "SelfTestEntry",
+      "description": "Student self-explanation and transfer application in 05. SELF TEST.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "subject": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "lesson": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "explain": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "apply": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "level": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "subject", "lesson", "explain", "apply", "level", "createdAt"]
+    },
+    "SurveySubmission": {
+      "title": "SurveySubmission",
+      "description": "7-question pre/post self-learning competency survey.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "surveyType": { "type": "string", "enum": ["before", "after"] },
+        "answers": { "type": "array" },
+        "average": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "surveyType", "answers", "average", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User educational profile (non-PII)."
+    },
+    "/users/{userId}/private/info": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Owner/admin isolated PII record."
+    },
+    "/users/{userId}/studyTasks/{taskId}": {
+      "schema": { "$ref": "#/entities/StudyTask" },
+      "description": "Study plan tasks owned by user."
+    },
+    "/users/{userId}/thinkEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/ThinkEntry" },
+      "description": "Think First entries owned by user."
+    },
+    "/users/{userId}/factChecks/{factId}": {
+      "schema": { "$ref": "#/entities/FactCheckRecord" },
+      "description": "Fact Check records owned by user."
+    },
+    "/users/{userId}/selfTests/{testId}": {
+      "schema": { "$ref": "#/entities/SelfTestEntry" },
+      "description": "Self Test reflections owned by user."
+    },
+    "/users/{userId}/surveys/{surveyId}": {
+      "schema": { "$ref": "#/entities/SurveySubmission" },
+      "description": "Survey submissions owned by user."
+    }
+  }
+}

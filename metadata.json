@@ -1,0 +1,6 @@
+{
+  "name": "EDU SMART",
+  "description": "Hệ sinh thái học tập thông minh - Trường PTDTNT THPT Quảng Nam: Học tập chủ động, tư duy độc lập, sử dụng AI có trách nhiệm.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
